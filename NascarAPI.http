@@ -1,0 +1,6 @@
+@NascarAPI_HostAddress = http://localhost:5238
+
+GET {{NascarAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
