@@ -42,7 +42,7 @@
     NoRaces INT,
     DriverName VARCHAR(100),
     CarMake VARCHAR(50)
-);
+   );
    ```
 
    #### MSSQL-re átalakítva:
@@ -53,7 +53,7 @@
     NoRaces INT,
     DriverName VARCHAR(100),
     CarMake VARCHAR(50)
-);
+   );
    ```
 
 ---
