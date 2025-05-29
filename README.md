@@ -17,40 +17,43 @@
 
    ```sql
    -- Adatbázis létrehozása
-   CREATE DATABASE GamerGuideDB;
+   CREATE DATABASE nascar;
 
    -- Adatbázis használata
-   USE GamerGuideDB;
+   USE nascar;
 
    -- Tábla létrehozása
-   CREATE TABLE Players (
-       PlayerID INT PRIMARY KEY IDENTITY(1,1),
-       Name NVARCHAR(100) NOT NULL,
-       Score INT NOT NULL,
-       JoinDate DATETIME DEFAULT GETDATE()
-   );
+   CREATE TABLE RaceWinners (
+    ID INT IDENTITY(1,1) PRIMARY KEY,  -- Identity column for unique IDs
+    Year INT,
+    NoRaces INT,
+    DriverName VARCHAR(100),
+    CarMake VARCHAR(50)
+);
    ```
 
    Ha a script MySQL-re készült, azt át kell írni MSSQL-re. Példa:
 
    #### MySQL script:
    ```sql
-   CREATE TABLE players (
-       player_id INT AUTO_INCREMENT PRIMARY KEY,
-       name VARCHAR(100) NOT NULL,
-       score INT NOT NULL,
-       join_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-   );
+   CREATE TABLE RaceWinners (
+    ID INT AUTO_INCREMENT PRIMARY KEY,  -- Identity column for unique IDs
+    Year INT,
+    NoRaces INT,
+    DriverName VARCHAR(100),
+    CarMake VARCHAR(50)
+);
    ```
 
    #### MSSQL-re átalakítva:
    ```sql
-   CREATE TABLE Players (
-       PlayerID INT PRIMARY KEY IDENTITY(1,1),
-       Name NVARCHAR(100) NOT NULL,
-       Score INT NOT NULL,
-       JoinDate DATETIME DEFAULT GETDATE()
-   );
+   CREATE TABLE RaceWinners (
+    ID INT IDENTITY(1,1) PRIMARY KEY,  -- Identity column for unique IDs
+    Year INT,
+    NoRaces INT,
+    DriverName VARCHAR(100),
+    CarMake VARCHAR(50)
+);
    ```
 
 ---
@@ -93,7 +96,7 @@ Scaffold-DbContext "_MyConnectionString_" Microsoft.EntityFrameworkCore.SqlServe
 
 Példa kapcsolati sztring:
 ```plaintext
-Server=(localdb)\MSSQLLocalDB;Database=GamerGuideDB;Trusted_Connection=True;
+Server=(localdb)\MSSQLLocalDB;Database=nascar;Trusted_Connection=True;
 ```
 
 ---
@@ -110,7 +113,7 @@ Példa:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=GamerGuideDB;Trusted_Connection=True;"
+    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=nascar;Trusted_Connection=True;"
   },
   "Logging": {
     "LogLevel": {
