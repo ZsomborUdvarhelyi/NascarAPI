@@ -1,225 +1,121 @@
-# Visual Studio 2022 Projekt Beállítások
-- **Projekt típus**: ASP.NET Core Web API
-- **Framework**: .NET 8.0
-- **Beállítások**:
-  - [x] Place solutioon and project in the same directory
-  - [x] Configurate for https
-  - [x] Enable Open API Support (swagger)
-  - [x] Use controllers (for MVC...)
+# ASP.NET Core Web API - Quick Start Guide
 
----
+This guide provides a quick overview of setting up a basic ASP.NET Core Web API project.
 
-# SQL Server Object Explorer
-1. Nyisd meg a **View -> SQL Server Object Explorer** menüt a Visual Studio-ban.
-2. Csatlakozz az **MSSQLLocalDB** példányhoz. Az alkalmazás az **MSSQLLocalDB** példányt használja, ezért győződj meg róla, hogy az adatbázis script MSSQL-kompatibilis.
-3. Hozz létre egy új lekérdezést (**New Query**).
-4. Például:  Futtasd az alábbi parancsokat az adatbázis létrehozásához és használatához:
+## Table of Contents
 
-   ```sql
-   -- Adatbázis létrehozása
-   CREATE DATABASE nascar;
+* [📌 Visual Studio 2022 Settings](#-visual-studio-2022-settings)
+* [🗄️ SQL Server Object Explorer](#️-sql-server-object-explorer)
+* [📦 Installing Packages (Package Manager Console)](#-installing-packages-package-manager-console)
+* [⚙️ appsettings.json Configuration](#️-appsettingsjson-configuration)
+* [📝 Program.cs Settings](#-programcs-settings)
+* [🎛️ Creating a Controller](#️-creating-a-controller)
+* [🔓 Enabling CORS (Program.cs)](#-enabling-cors-programcs)
 
-   -- Adatbázis használata
-   USE nascar;
+## 📌 Visual Studio 2022 Settings
 
-   -- Tábla létrehozása
-   CREATE TABLE RaceWinners (
-    ID INT IDENTITY(1,1) PRIMARY KEY,  -- Identity column for unique IDs
-    Year INT,
-    NoRaces INT,
-    DriverName VARCHAR(100),
-    CarMake VARCHAR(50)
-   );
-   ```
+When creating a new project in Visual Studio 2022, ensure the following settings are configured:
 
-   Ha a script MySQL-re készült, azt át kell írni MSSQL-re. Példa:
+* **Project Template:** ASP.NET Core Web API
+* **Place solution and project in the same directory:** Check this option.
+* **Framework:** .NET 8.0
+* **Configure for HTTPS:** Check this option.
+* **Enable OpenAPI support (Swagger):** Check this option.
+* **Use controllers (MVC):** Ensure this is the selected option.
 
-   #### MySQL script:
-   ```sql
-   CREATE TABLE RaceWinners (
-    ID INT AUTO_INCREMENT PRIMARY KEY,  -- Identity column for unique IDs
-    Year INT,
-    NoRaces INT,
-    DriverName VARCHAR(100),
-    CarMake VARCHAR(50)
-   );
-   ```
+## 🗄️ SQL Server Object Explorer
 
-   #### MSSQL-re átalakítva:
-   ```sql
-   CREATE TABLE RaceWinners (
-    ID INT IDENTITY(1,1) PRIMARY KEY,  -- Identity column for unique IDs
-    Year INT,
-    NoRaces INT,
-    DriverName VARCHAR(100),
-    CarMake VARCHAR(50)
-   );
-   ```
+To create the database, you can use the SQL Server Object Explorer.
 
----
+* **Add New Query:** Open a new query window connected to your SQL Server instance.
+* **Execute the following SQL command to create your database:**
 
+    ```sql
+    CREATE DATABASE YourDatabaseName;
+    ```
+* You can convert sql codes to different languages <a href='https://www.sqlines.com/mysql-to-sql-server' target='_blank'>here</a>
 
+## 📦 Installing Packages (Package Manager Console)
 
-# NuGet Package Manager Console
-### Hogyan érheted el a NuGet Package Manager Console-t?
-1. Nyisd meg a Visual Studio-t.
-2. A menüsorban válaszd ki a **Tools** menüt.
-3. Kattints a **NuGet Package Manager -> Package Manager Console** lehetőségre.
-4. A konzol megjelenik az alsó panelen.
+Open the Package Manager Console in Visual Studio and run the following commands to install the necessary Entity Framework Core packages:
 
-### Szükséges parancsok
-Futtasd az alábbi parancsokat a NuGet Package Manager Console-ban a szükséges csomagok telepítéséhez:
-
-```bash
+```powershell
 Install-Package Microsoft.EntityFrameworkCore.SqlServer
 Install-Package Microsoft.EntityFrameworkCore.Design
 Install-Package Microsoft.EntityFrameworkCore.Tools
 ```
 
----
+To generate the database context and model classes from your existing database, use the following command. Remember to replace the placeholders with your actual connection string, context name, and model output directory.
 
-# Scaffold-DbContext
-Generáld a DbContext osztályt és a modelleket az alábbi paranccsal:
-
-```bash
-Scaffold-DbContext "_MyConnectionString_" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context _MyDbContext_ -DataAnnotations
+```powershell
+Scaffold-DbContext "_YourConnectionString_" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context _YourDbContext_ -DataAnnotations
 ```
 
----
+## ⚙️ appsettings.json Configuration
 
-# Hogyan szerezheted meg a DefaultConnection kapcsolati sztringet?
-1. Nyisd meg a **SQL Server Object Explorer**-t a Visual Studio-ban (**View -> SQL Server Object Explorer**).
-2. Csatlakozz az **MSSQLLocalDB** példányhoz.
-3. Ha még nincs adatbázisod, hozz létre egyet: [SQL Server Object Explorer](#sql-server-object-explorer)
-4. Miután létrehoztad az adatbázist, kattints rá jobb egérgombbal, majd válaszd a **Properties** (Tulajdonságok) lehetőséget.
-5. A **Properties** ablakban keresd meg a **Connection String** mezőt. Ez tartalmazza az adatbázis kapcsolati sztringjét.
-
-Példa kapcsolati sztring:
-```plaintext
-Server=(localdb)\MSSQLLocalDB;Database=nascar;Trusted_Connection=True;
-```
-
----
-
-# appsettings.json
-A kapcsolati sztringet az `appsettings.json` fájlban kell megadni. 
-```json
-"ConnectionStrings": {
-    "DefaultConnection": "_MyConnectionString_"
-  },
-```
-Példa:
+Configure your database connection string in the ``appsettings.json`` file:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=nascar;Trusted_Connection=True;"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "AllowedHosts": "*"
+    "DefaultConnection": "_YourConnectionString_"
+  }
 }
 ```
 
----
-# program.cs
-Regisztráld a DbContext osztályt és engedélyezd a CORS-t a `program.cs` fájlban:
+Replace ``_YourConnectionString_`` with your actual SQL Server connection string.
 
-### 1. Kapcsolati sztring beolvasása
-```csharp
-var connectionString = builder.Configuration
-    .GetConnectionString("DefaultConnection");
-```
-- Az `appsettings.json` fájlban megadott `DefaultConnection` nevű kapcsolati sztringet olvassa be.
+## 📝 Program.cs Settings
 
-### 2. DbContext regisztrálása
-```csharp
-builder.Services
-    .AddDbContext<_MyDbContext_>(opt => opt.UseSqlServer(connectionString));
-```
-- Regisztrálja a DbContext osztályt, amely az adatbázis műveletek kezeléséért felelős.
+Add the database connection to your application's services in the ``Program.cs`` file:
 
-### 3. CORS engedélyezése
-```csharp
-builder.Services.AddCors(
-    options => options.AddDefaultPolicy(
-        builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-    ));
-```
-- Engedélyezi a CORS-t, hogy az API-t bármely domain elérhesse.
-
----
-
-### 4. Middleware beállítása (FONTOS: Hol kell aktiválni a CORS-t)
-A CORS middleware-t **a `program.cs` fájl middleware szakaszában kell aktiválni**, **mielőtt** a `app.UseHttpsRedirection()` hívás történik.
-
-```csharp
-app.UseCors(); // CORS middleware aktiválása
-app.UseHttpsRedirection();
-```
-
-- **Helye**: A middleware konfigurációs szakaszban, **mielőtt** a `UseHttpsRedirection()` hívás történik.
-- **Funkciója**: Biztosítja, hogy a CORS szabályok alkalmazásra kerüljenek a bejövő HTTP-kérésekre.
-
----
-
-### Teljes program.cs példa
-Az alábbiakban egy teljes `program.cs` fájl látható, amely tartalmazza a CORS regisztrálását és aktiválását:
-
-```csharp
+```c#
 var builder = WebApplication.CreateBuilder(args);
 
-// Kapcsolati sztring beolvasása
+// ... other service configurations ...
+
 var connectionString = builder.Configuration
     .GetConnectionString("DefaultConnection");
-
-// DbContext regisztrálása
 builder.Services
-    .AddDbContext<_MyDbContext_>(opt => opt.UseSqlServer(connectionString));
+    .AddDbContext<_YourDbContext_>
+    (opt => opt.UseSqlServer(connectionString));
 
-// CORS engedélyezése
+// ... rest of the Program.cs ...
+```
+
+## 🎛️ Creating a Controller
+
+When creating a new controller:
+
+* Model Class: _YourModel_ (Replace with the name of your model class)
+* DbContext Class: _YourDbContext_ (Replace with the name of your DbContext class)
+* Controller Name: _YourModel_sController (By default, it's the pluralized form of your model name)
+
+## 🔓 Enabling CORS (Program.cs)
+
+To enable Cross-Origin Resource Sharing (CORS) for development purposes, add the following code to your Program.cs file:
+```C#
+var builder = WebApplication.CreateBuilder(args);
+
+// ... other service configurations ...
+
 builder.Services.AddCors(
     options => options.AddDefaultPolicy(
         builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-    ));
-
-// Swagger támogatás hozzáadása
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()));
 
 var app = builder.Build();
 
-// Middleware-ek
-app.UseCors(); // CORS middleware aktiválása (FONTOS: Ez legyen a UseHttpsRedirection előtt!)
+// This must be added before app.UseHttpsRedirection();
+app.UseCors();
+
 app.UseHttpsRedirection();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.MapControllers();
+// ... rest of the app pipeline ...
 app.Run();
 ```
----
-# API Controller létrehozása
-### Hogyan hozhatsz létre API Controllert az Entity Framework használatával?
-1. Nyisd meg a **Controllers** mappát a Solution Explorer-ben.
-2. Kattints jobb egérgombbal a mappára, majd válaszd az **Add -> New Scaffolded Item...** lehetőséget.
-3. A megjelenő ablakban válaszd ki az **API Controller with actions, using Entity Framework** opciót, majd kattints a **Add** gombra.
-4. Töltsd ki az alábbi mezőket:
-   - **Model class**: `_MyModel_`
-   - **Data context class**: `_MyDbContext_`
-   - **Controller name**: `_MyModel_sController` (alapértelmezetten megadott, nem szükséges átnevezni)
-5. Kattints a **Add** gombra, és a Visual Studio automatikusan generálja a szükséges kódot.
+
+> [!NOTE] 
+> Allowing AnyOrigin, AnyHeader, and AnyMethod is generally not recommended for production environments due to security implications. You should configure CORS with specific origins, headers, and methods as needed for your application.
