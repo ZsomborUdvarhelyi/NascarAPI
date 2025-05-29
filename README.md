@@ -29,7 +29,7 @@
     NoRaces INT,
     DriverName VARCHAR(100),
     CarMake VARCHAR(50)
-);
+   );
    ```
 
    Ha a script MySQL-re készült, azt át kell írni MSSQL-re. Példa:
